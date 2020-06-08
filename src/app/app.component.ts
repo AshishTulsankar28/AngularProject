@@ -14,17 +14,27 @@ export class AppComponent {
   title = "Live  ! ";
   employees=[{firstName:"Ashish",lastName:"Tulsankar"},{firstName:"Sanket",lastName:"Tulsankar"}];
   displayData:boolean=false;
-  receivedData:String='abcd';
+  empNo:number;
+  receivedData:String;
 
   constructor(private apiService: ApiService){
       console.log("AppComponent constructor init");
   }
 
-  getEmpDetails() {
-    this.apiService.getEmpDetails(20004).then((res=>{
-      console.log("getEmpDetails",res['firstName']);
-      this.receivedData=res['firstName'];
-      this.displayData=true;
-    }))
+  getEmpDetails(empNo:number) {
+
+    if(Number(empNo)){
+      this.apiService.getEmpDetails(empNo).then((res=>{
+        this.receivedData=res['firstName']+' '+res['lastName'];
+        this.displayData=true;
+      }),(reason => {
+        console.log("Is it rejected ? why ", reason);
+        this.receivedData='';
+        this.displayData=false;
+      }))
+    }else{
+      window.alert("Enter Valid Employee ID");
+    }
+
   }
 }

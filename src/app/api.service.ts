@@ -17,11 +17,10 @@ export class ApiService {
 
       httpClientVar.get('http://localhost:8080/web-server/getEmpDetails/?empId='+empNo).subscribe((res)=>{
         response=res['responseData'];
-        console.log("Inside Service : ",response);
         if(response){
        resolve(response);
         }else{
-          reject(response);
+          reject(null);
         }
       });
     });
