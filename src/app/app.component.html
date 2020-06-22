@@ -25,8 +25,14 @@
     flex: 1;
   }
 
-  .button-row {
-    display: table-cell;
+  .my-custom-scrollbar {
+    position: relative;
+    height: 325px;
+    width: 750px;
+    overflow: auto;
+  }
+  .table-wrapper-scroll-y {
+    display: block;
   }
 
   .toolbar {
@@ -62,79 +68,6 @@
     max-width: 960px;
     flex-direction: column;
     align-items: center;
-  }
-
-
-  .card svg.material-icons path {
-    fill: #888;
-  }
-
-
-  .card {
-    border-radius: 4px;
-    border: 1px solid #eee;
-    background-color: #fafafa;
-    height: 40px;
-    width: 200px;
-    margin: 0 8px 16px;
-    padding: 16px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.2s ease-in-out;
-    line-height: 24px;
-  }
-
-  .card-container .card:not(:last-child) {
-    margin-right: 0;
-  }
-
-  .card.card-small {
-    height: 16px;
-    width: 168px;
-  }
-
-  .card-container .card:not(.highlight-card) {
-    cursor: pointer;
-  }
-
-  .card-container .card:not(.highlight-card):hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
-  }
-
-  .card-container .card:not(.highlight-card):hover .material-icons path {
-    fill: rgb(105, 103, 103);
-  }
-
-  .card.highlight-card {
-    background-color: #1976d2;
-    color: white;
-    font-weight: 600;
-    border: none;
-    width: auto;
-    min-width: 30%;
-    position: relative;
-  }
-
-  .card.card.highlight-card span {
-    margin-left: 60px;
-  }
-
-  svg#rocket {
-    width: 80px;
-    position: absolute;
-    left: -10px;
-    top: -24px;
-  }
-
-  svg#rocket-smoke {
-    height: calc(100vh - 95px);
-    position: absolute;
-    top: 10px;
-    right: 180px;
-    z-index: -10;
   }
 
   a,
@@ -180,36 +113,6 @@
     width: 1920px;
   }
 
-
-  /* Responsive Styles */
-  @media screen and (max-width: 767px) {
-
-    .card-container > *:not(.circle-link) ,
-    .terminal {
-      width: 100%;
-    }
-
-    .card:not(.highlight-card) {
-      height: 16px;
-      margin: 8px 0;
-    }
-
-    .card.highlight-card span {
-      margin-left: 72px;
-    }
-
-    svg#rocket-smoke {
-      right: 120px;
-      transform: rotate(-5deg);
-    }
-  }
-
-  @media screen and (max-width: 575px) {
-    svg#rocket-smoke {
-      display: none;
-      visibility: hidden;
-    }
-  }
 </style>
 
 <!-- Toolbar -->
@@ -231,22 +134,39 @@
 
 <div class="content" role="main">
 
-  <div class="md-form">
-    <label for="form1" class="">Enter Employee ID:</label>
-    <input style="margin-left: 10px" type="text" id="form1" class="form-control"  [(ngModel)]="empNo" >
-    <button style="margin-left: 10px" (click)="getEmpDetails(empNo)">Display </button>
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="empAddOn">Employee ID - </span>
+    </div>
+    <input type="text" [(ngModel)]="empNo" class="form-control" placeholder="Employee ID" aria-label="Employee ID" aria-describedby="empAddOn">
+    <button style="margin-left: 10px" type="submit" class="btn-primary"  (click)="getEmpDetails(empNo)">Display </button>
   </div>
-
   <div style="margin-top: 10px" *ngIf="displayData" > Employee Name: {{receivedData}} </div>
 
+  <br>
 
-  <h3>Demo Table:</h3>
-  <table>
-    <tr *ngFor="let emp of employees">
-      <td>{{ emp.firstName }}</td>
-      <td>{{ emp.lastName }}</td>
-    </tr>
-  </table>
+    <div class="row">
+      <button class="btn-primary"  (click)="getAllEmp()"> Display Table Data  </button>
+      <button style="margin-left: 10px" class="btn-secondary" (click)="hideEmpData()"> Hide it  </button>
+    </div>
+    <div *ngIf="displayTab"  class="my-custom-scrollbar table-wrapper-scroll-y">
+      <table style="margin-top: 10px;overscroll-behavior-y: auto" class="table">
+        <tr>
+          <th>Employee ID</th>
+          <th>First Name</th>
+          <th>Last Name </th>
+          <th>Birth Date </th>
+        </tr>
+
+        <tr *ngFor="let emp of empData">
+          <td >{{ emp['empNo']     }}</td>
+          <td >{{ emp['firstName'] }}</td>
+          <td >{{ emp['lastName']  }}</td>
+          <td >{{ emp['birthDate']  }}</td>
+        </tr>
+      </table>
+    </div>
+
 
   <h4>Many things on the way...</h4>
 
@@ -255,7 +175,7 @@
 
   <!-- Footer -->
   <footer>
-      <h5> Designed By Ashish Tulsankar </h5>
+      <h6> Designed By Ashish Tulsankar </h6>
   </footer>
 
   <svg id="clouds" alt="Gray Clouds Background" xmlns="http://www.w3.org/2000/svg" width="2611.084" height="485.677" viewBox="0 0 2611.084 485.677">
